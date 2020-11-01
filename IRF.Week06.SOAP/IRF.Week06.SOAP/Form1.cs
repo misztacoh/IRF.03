@@ -4,7 +4,9 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Globalization;
 using System.Linq;
+using System.ServiceModel.Channels;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -16,39 +18,36 @@ namespace IRF.Week06.SOAP
     public partial class Form1 : Form
     {
         private List<RateData> Rates = new List<RateData>();
+        private List<string> Currencies = new List<string>();
         public Form1()
         {
             InitializeComponent();
+            
 
-            comboBox1.Text = "EUR";
+            var currMnbService = new MnbServiceReference.MNBArfolyamServiceSoapClient();
+            var currRequest = new MnbServiceReference.GetCurrenciesRequestBody();
+            var currResponse = currMnbService.GetCurrencies(currRequest);
+            var currResult = currResponse.GetCurrenciesResult;
+
+            var currXml = new XmlDocument();
+            currXml.LoadXml(currResult);
+
+            foreach (XmlNode node in currXml)
+            {
+                foreach (XmlNode currency in node.LastChild)
+                {
+                    Currencies.Add(currency.InnerText);
+                }
+            }
+
             dateTimePicker1.Value = new DateTime(2020,01,01);
             dateTimePicker2.Value = DateTime.Today;
 
-
-            //// A változó deklarációk jobb oldalán a "var" egy dinamikus változó típus.
-            //// A "var" változó az első értékadás pillanatában a kapott érték típusát veszi fel, és később nem változtatható.
-            //// Jelen példa első sora tehát ekvivalens azzal, ha a "var" helyélre a MNBArfolyamServiceSoapClient-t írjuk.
-            //// Ebben a formában azonban olvashatóbb a kód, és változtatás esetén elég egy helyen átírni az osztály típusát.
-            //var mnbService = new MnbServiceReference.MNBArfolyamServiceSoapClient();
-
-            //var request = new MnbServiceReference.GetExchangeRatesRequestBody()
-            //{
-            //    currencyNames = "EUR",
-            //    startDate = "2020-01-01",
-            //    endDate = "2020-06-30"
-            //};
-
-            //// Ebben az esetben a "var" a GetExchangeRates visszatérési értékéből kapja a típusát.
-            //// Ezért a response változó valójában GetExchangeRatesResponseBody típusú.
-            //var response = mnbService.GetExchangeRates(request);
-
-            //// Ebben az esetben a "var" a GetExchangeRatesResult property alapján kapja a típusát.
-            //// Ezért a result változó valójában string típusú.
-            //var result = response.GetExchangeRatesResult;
+            BindingSource bs = new BindingSource();
+            bs.DataSource = Currencies;
+            comboBox1.DataSource = bs.DataSource;
 
             RefreshData();
-
-            dataGridView1.DataSource = Rates.ToList(); 
         }
 
         private void RefreshData()
@@ -74,6 +73,8 @@ namespace IRF.Week06.SOAP
 
             ReadXml(result);
             DrawChart();
+
+            dataGridView1.DataSource = Rates.ToList();
         }
 
         private void DrawChart()
@@ -114,16 +115,25 @@ namespace IRF.Week06.SOAP
 
                 // Valuta
                 var childElement = (XmlElement)element.ChildNodes[0];
+
+                if (childElement == null)
+                    continue;
+
                 rate.Currency = childElement.GetAttribute("curr");
 
                 // Érték
+
                 var unit = decimal.Parse(childElement.GetAttribute("unit"));
-                var value = decimal.Parse(childElement.InnerText);
+                //var value = decimal.Parse(childElement.InnerText, style);
+
+                var value = childElement.InnerText;
+                value = value.Replace(",", CultureInfo.InvariantCulture.NumberFormat.NumberDecimalSeparator);
+                var val = decimal.Parse(value, NumberStyles.Any, CultureInfo.InvariantCulture);
+
                 if (unit != 0)
-                    rate.Value = value / unit;
+                    rate.Value = val / unit;
             }
         }
-
         private void Form1_Load(object sender, EventArgs e)
         {
 
@@ -135,6 +145,11 @@ namespace IRF.Week06.SOAP
         }
 
         private void dateTimePicker2_ValueChanged(object sender, EventArgs e)
+        {
+            RefreshData();
+        }
+
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
             RefreshData();
         }
