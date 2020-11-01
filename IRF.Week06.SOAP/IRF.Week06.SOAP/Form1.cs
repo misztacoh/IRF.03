@@ -20,31 +20,60 @@ namespace IRF.Week06.SOAP
         {
             InitializeComponent();
 
-            // A változó deklarációk jobb oldalán a "var" egy dinamikus változó típus.
-            // A "var" változó az első értékadás pillanatában a kapott érték típusát veszi fel, és később nem változtatható.
-            // Jelen példa első sora tehát ekvivalens azzal, ha a "var" helyélre a MNBArfolyamServiceSoapClient-t írjuk.
-            // Ebben a formában azonban olvashatóbb a kód, és változtatás esetén elég egy helyen átírni az osztály típusát.
-            var mnbService = new MnbServiceReference.MNBArfolyamServiceSoapClient();
+            comboBox1.Text = "EUR";
+            dateTimePicker1.Value = new DateTime(2020,01,01);
+            dateTimePicker2.Value = DateTime.Today;
 
+
+            //// A változó deklarációk jobb oldalán a "var" egy dinamikus változó típus.
+            //// A "var" változó az első értékadás pillanatában a kapott érték típusát veszi fel, és később nem változtatható.
+            //// Jelen példa első sora tehát ekvivalens azzal, ha a "var" helyélre a MNBArfolyamServiceSoapClient-t írjuk.
+            //// Ebben a formában azonban olvashatóbb a kód, és változtatás esetén elég egy helyen átírni az osztály típusát.
+            //var mnbService = new MnbServiceReference.MNBArfolyamServiceSoapClient();
+
+            //var request = new MnbServiceReference.GetExchangeRatesRequestBody()
+            //{
+            //    currencyNames = "EUR",
+            //    startDate = "2020-01-01",
+            //    endDate = "2020-06-30"
+            //};
+
+            //// Ebben az esetben a "var" a GetExchangeRates visszatérési értékéből kapja a típusát.
+            //// Ezért a response változó valójában GetExchangeRatesResponseBody típusú.
+            //var response = mnbService.GetExchangeRates(request);
+
+            //// Ebben az esetben a "var" a GetExchangeRatesResult property alapján kapja a típusát.
+            //// Ezért a result változó valójában string típusú.
+            //var result = response.GetExchangeRatesResult;
+
+            RefreshData();
+
+            dataGridView1.DataSource = Rates.ToList(); 
+        }
+
+        private void RefreshData()
+        {
+            Rates.Clear();
+
+            if (dateTimePicker1.Value > dateTimePicker2.Value)
+            {
+                dateTimePicker1.Value = dateTimePicker2.Value.AddDays(-1);
+                MessageBox.Show("Helytelen dátum.");
+            }
+
+            var mnbService = new MnbServiceReference.MNBArfolyamServiceSoapClient();
             var request = new MnbServiceReference.GetExchangeRatesRequestBody()
             {
-                currencyNames = "EUR",
-                startDate = "2020-01-01",
-                endDate = "2020-06-30"
+                currencyNames = comboBox1.Text.ToString(),
+                startDate = dateTimePicker1.Value.ToString(),
+                endDate = dateTimePicker2.Value.ToString()
             };
 
-            // Ebben az esetben a "var" a GetExchangeRates visszatérési értékéből kapja a típusát.
-            // Ezért a response változó valójában GetExchangeRatesResponseBody típusú.
             var response = mnbService.GetExchangeRates(request);
-
-            // Ebben az esetben a "var" a GetExchangeRatesResult property alapján kapja a típusát.
-            // Ezért a result változó valójában string típusú.
             var result = response.GetExchangeRatesResult;
 
             ReadXml(result);
             DrawChart();
-
-            dataGridView1.DataSource = Rates.ToList(); 
         }
 
         private void DrawChart()
@@ -98,6 +127,16 @@ namespace IRF.Week06.SOAP
         private void Form1_Load(object sender, EventArgs e)
         {
 
+        }
+
+        private void dateTimePicker1_ValueChanged(object sender, EventArgs e)
+        {
+            RefreshData();
+        }
+
+        private void dateTimePicker2_ValueChanged(object sender, EventArgs e)
+        {
+            RefreshData();
         }
     }
 }
