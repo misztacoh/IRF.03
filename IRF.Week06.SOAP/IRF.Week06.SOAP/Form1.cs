@@ -1,4 +1,5 @@
-﻿using System;
+﻿using IRF.Week06.SOAP.Entities;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -12,6 +13,7 @@ namespace IRF.Week06.SOAP
 {
     public partial class Form1 : Form
     {
+        private List<RateData> Rates = new List<RateData>();
         public Form1()
         {
             InitializeComponent();
@@ -36,6 +38,8 @@ namespace IRF.Week06.SOAP
             // Ebben az esetben a "var" a GetExchangeRatesResult property alapján kapja a típusát.
             // Ezért a result változó valójában string típusú.
             var result = response.GetExchangeRatesResult;
+
+            dataGridView1.DataSource = Rates.ToList(); 
         }
 
         private void Form1_Load(object sender, EventArgs e)
