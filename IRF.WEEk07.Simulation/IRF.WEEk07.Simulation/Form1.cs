@@ -22,28 +22,13 @@ namespace IRF.WEEk07.Simulation
         {
             InitializeComponent();
 
-            Population = GetPopulation(@"C:\Temp\nép.csv");
             BirthProbabilities = GetBirthProbabilities(@"C:\Temp\születés.csv");
             DeathProbabilities = GetDeathProbabilities(@"C:\Temp\halál.csv");
 
-            // Végigmegyünk a vizsgált éveken
-            for (int year = 2005; year <= 2024; year++)
-            {
-                // Végigmegyünk az összes személyen
-                for (int i = 0; i < Population.Count; i++)
-                {
-                    // Ide jön a szimulációs lépés
-                }
+            numericUpDown1.Minimum = 2005;
+            numericUpDown1.Maximum = 2024;
+            numericUpDown1.Value = 2006;
 
-                int nbrOfMales = (from x in Population
-                                  where x.Gender == Gender.Male && x.IsAlive
-                                  select x).Count();
-                int nbrOfFemales = (from x in Population
-                                    where x.Gender == Gender.Female && x.IsAlive
-                                    select x).Count();
-                Console.WriteLine(
-                    string.Format("Év:{0} Fiúk:{1} Lányok:{2}", year, nbrOfMales, nbrOfFemales));
-            }
         }
 
         private List<DeathProbability> GetDeathProbabilities(string csvpath)
@@ -159,6 +144,80 @@ namespace IRF.WEEk07.Simulation
                     újszülött.Gender = (Gender)(rng.Next(1, 3));
                     Population.Add(újszülött);
                 }
+            }
+        }
+
+        private void btnStart_Click(object sender, EventArgs e)
+        {
+            richTextBox1.Clear();
+            richTextBox1.AcceptsTab = true;
+            Simulation();
+        }
+        private void Simulation()
+        {
+            try
+            {
+                Population = GetPopulation(textBox1.Text);
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Nem jó népesség adatok");
+            }
+
+            int szimulaciovege = Convert.ToInt32(numericUpDown1.Value);
+            List<string[]> adatok = new List<string[]>();
+            string[] thisYearData = new string[3];
+            bool elsofutas = true;
+
+            // Végigmegyünk a vizsgált éveken
+            for (int year = 2005; year <= szimulaciovege; year++)
+            {
+
+                thisYearData[0] = year.ToString();
+
+                if (elsofutas)
+                {
+                    thisYearData[0] = "2005";
+                    elsofutas = false;
+                }
+
+                // Végigmegyünk az összes személyen
+                for (int i = 0; i < Population.Count; i++)
+                {
+                    SimStep(year, Population[i]);
+                }
+
+                int nbrOfMales = (from x in Population
+                                  where x.Gender == Gender.Male && x.IsAlive
+                                  select x).Count();
+                int nbrOfFemales = (from x in Population
+                                    where x.Gender == Gender.Female && x.IsAlive
+                                    select x).Count();
+
+                //richTextBox1.AppendText(String.Format("{3}Szimulációs év:{0} {3}\tFiúk:{1} {3}\tLányok:{2}{3}", year, nbrOfMales, nbrOfFemales, Environment.NewLine));
+
+                thisYearData[1] = nbrOfMales.ToString();
+                thisYearData[2] = nbrOfFemales.ToString();
+                adatok.Add(thisYearData);
+            }
+
+            foreach (var item in adatok)
+            {
+                string year = item[0];
+                string nbrOfMales = item[1];
+                string nbrOfFemales = item[2];
+                richTextBox1.AppendText(String.Format("{3}Szimulációs év:{0} {3}\tFiúk:{1} {3}\tLányok:{2}{3}", year, nbrOfMales, nbrOfFemales, Environment.NewLine));
+            }
+        
+            MessageBox.Show("Kész");
+        }
+        private void btnBrowse_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog ofd = new OpenFileDialog();
+
+            if (ofd.ShowDialog() == DialogResult.OK)
+            {
+                textBox1.Text = ofd.FileName;
             }
         }
     }
