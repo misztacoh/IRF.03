@@ -165,22 +165,13 @@ namespace IRF.WEEk07.Simulation
             }
 
             int szimulaciovege = Convert.ToInt32(numericUpDown1.Value);
-            List<string[]> adatok = new List<string[]>();
-            string[] thisYearData = new string[3];
-            bool elsofutas = true;
-
+            //List<string[]> adatok = new List<string[]>();
+            //string[] thisYearData = new string[3];
+            
             // Végigmegyünk a vizsgált éveken
             for (int year = 2005; year <= szimulaciovege; year++)
             {
-
-                thisYearData[0] = year.ToString();
-
-                if (elsofutas)
-                {
-                    thisYearData[0] = "2005";
-                    elsofutas = false;
-                }
-
+               
                 // Végigmegyünk az összes személyen
                 for (int i = 0; i < Population.Count; i++)
                 {
@@ -194,21 +185,19 @@ namespace IRF.WEEk07.Simulation
                                     where x.Gender == Gender.Female && x.IsAlive
                                     select x).Count();
 
-                //richTextBox1.AppendText(String.Format("{3}Szimulációs év:{0} {3}\tFiúk:{1} {3}\tLányok:{2}{3}", year, nbrOfMales, nbrOfFemales, Environment.NewLine));
-
-                thisYearData[1] = nbrOfMales.ToString();
-                thisYearData[2] = nbrOfFemales.ToString();
-                adatok.Add(thisYearData);
-            }
-
-            foreach (var item in adatok)
-            {
-                string year = item[0];
-                string nbrOfMales = item[1];
-                string nbrOfFemales = item[2];
                 richTextBox1.AppendText(String.Format("{3}Szimulációs év:{0} {3}\tFiúk:{1} {3}\tLányok:{2}{3}", year, nbrOfMales, nbrOfFemales, Environment.NewLine));
+
+                //thisYearData[0] = year.ToString();
+                //thisYearData[1] = nbrOfMales.ToString();
+                //thisYearData[2] = nbrOfFemales.ToString();
+                //adatok.Add(thisYearData);
             }
-        
+
+            //foreach (var item in adatok)
+            //{
+            //    richTextBox1.AppendText(String.Format("{3}Szimulációs év:{0} {3}\tFiúk:{1} {3}\tLányok:{2}{3}", item[0], item[1], item[2], Environment.NewLine));
+            //}
+
             MessageBox.Show("Kész");
         }
         private void btnBrowse_Click(object sender, EventArgs e)
