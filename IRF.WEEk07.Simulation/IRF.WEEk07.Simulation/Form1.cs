@@ -185,6 +185,7 @@ namespace IRF.WEEk07.Simulation
                                     where x.Gender == Gender.Female && x.IsAlive
                                     select x).Count();
 
+                //kiváltja a string arraylistet
                 richTextBox1.AppendText(String.Format("{3}Szimulációs év:{0} {3}\tFiúk:{1} {3}\tLányok:{2}{3}", year, nbrOfMales, nbrOfFemales, Environment.NewLine));
 
                 //thisYearData[0] = year.ToString();
