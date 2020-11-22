@@ -28,7 +28,7 @@ namespace WEEK08.Patterns
         public Form1()
         {
             InitializeComponent();
-            Factory = new BallFactory();
+            Factory = new CarFactory();
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -68,6 +68,7 @@ namespace WEEK08.Patterns
         private void carBtn_Click(object sender, EventArgs e)
         {
             Factory = new CarFactory();
+            DisplayNext();
         }
 
         private void ballBtn_Click(object sender, EventArgs e)
@@ -76,6 +77,17 @@ namespace WEEK08.Patterns
             {
                 BallColor = colorBtn.BackColor
             };
+            DisplayNext();
+        }
+
+        private void presentBtn_Click(object sender, EventArgs e)
+        {
+            Factory = new PresentFactory
+            {
+                Box = cBoxBtn.BackColor,
+                Ribbon = cRibbonBtn.BackColor
+            };
+            DisplayNext();
         }
 
         private void DisplayNext()
@@ -91,12 +103,40 @@ namespace WEEK08.Patterns
         private void colorBtn_Click(object sender, EventArgs e)
         {
             var button = (Button)sender;
+            button.BackColor = ColorPicker(button);
+
+            //var button = (Button)sender;
+            //var colorPicker = new ColorDialog();
+
+            //colorPicker.Color = button.BackColor;
+            //if (colorPicker.ShowDialog() != DialogResult.OK)
+            //    return;
+            //button.BackColor = colorPicker.Color;
+
+        }
+
+
+
+        private Color ColorPicker(Button button)
+        {
             var colorPicker = new ColorDialog();
 
             colorPicker.Color = button.BackColor;
             if (colorPicker.ShowDialog() != DialogResult.OK)
-                return;
-            button.BackColor = colorPicker.Color;
+            { return colorPicker.Color; }
+            return colorPicker.Color;
+        }
+
+        private void cBoxBtn_Click(object sender, EventArgs e)
+        {
+            var button = (Button)sender;
+            button.BackColor = ColorPicker(button);
+        }
+
+        private void cRibbonBtn_Click(object sender, EventArgs e)
+        {
+            var button = (Button)sender;
+            button.BackColor = ColorPicker(button);
         }
     }
 }
