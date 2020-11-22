@@ -23,7 +23,7 @@ namespace WEEK08.Patterns.Entities
             DrawImage(e.Graphics);
         }
 
-        private void DrawImage(Graphics graphics)
+        protected void DrawImage(Graphics g)
         {
             g.FillEllipse(new SolidBrush(Color.Blue), 0, 0, Width, Height);
         }
