@@ -6,8 +6,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using WEEK08.Patterns.Entities;
+using WEEK08.Patterns.Abstractions;
 
-namespace WEEK08.Patterns
+namespace WEEK08.Patterns.Entities
 {
     public class Ball : Toy
     {
