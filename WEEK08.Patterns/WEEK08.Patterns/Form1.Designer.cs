@@ -35,6 +35,7 @@
             this.lblNext = new System.Windows.Forms.Label();
             this.carBtn = new System.Windows.Forms.Button();
             this.ballBtn = new System.Windows.Forms.Button();
+            this.colorBtn = new System.Windows.Forms.Button();
             this.mainPanel.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -43,6 +44,7 @@
             this.mainPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.mainPanel.Controls.Add(this.colorBtn);
             this.mainPanel.Controls.Add(this.ballBtn);
             this.mainPanel.Controls.Add(this.carBtn);
             this.mainPanel.Controls.Add(this.lblNext);
@@ -90,6 +92,16 @@
             this.ballBtn.UseVisualStyleBackColor = true;
             this.ballBtn.Click += new System.EventHandler(this.ballBtn_Click);
             // 
+            // colorBtn
+            // 
+            this.colorBtn.BackColor = System.Drawing.Color.Lime;
+            this.colorBtn.Location = new System.Drawing.Point(241, 16);
+            this.colorBtn.Name = "colorBtn";
+            this.colorBtn.Size = new System.Drawing.Size(75, 23);
+            this.colorBtn.TabIndex = 3;
+            this.colorBtn.UseVisualStyleBackColor = false;
+            this.colorBtn.Click += new System.EventHandler(this.colorBtn_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -113,6 +125,7 @@
         private System.Windows.Forms.Button ballBtn;
         private System.Windows.Forms.Button carBtn;
         private System.Windows.Forms.Label lblNext;
+        private System.Windows.Forms.Button colorBtn;
     }
 }
 
