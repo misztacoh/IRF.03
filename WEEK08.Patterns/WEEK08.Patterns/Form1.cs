@@ -16,7 +16,7 @@ namespace WEEK08.Patterns
         private List<Ball> _balls = new List<Ball>();
 
         private BallFactory _factory;
-        BallFactory Factory
+        public BallFactory Factory
         {
             get { return _factory; }
             set { _factory = value; }
