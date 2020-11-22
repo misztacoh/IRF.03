@@ -7,22 +7,21 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using WEEK08.Patterns.Abstractions;
 using WEEK08.Patterns.Entities;
 
 namespace WEEK08.Patterns
 {
     public partial class Form1 : Form
     {
-        private List<Ball> _balls = new List<Ball>();
+        private List<Toy> _toys = new List<Toy>();
 
-        private BallFactory _factory;
-        public BallFactory Factory
+        private IToyFactory _factory;
+        public IToyFactory Factory
         {
             get { return _factory; }
             set { _factory = value; }
         }
-
-
 
         public Form1()
         {
@@ -37,29 +36,29 @@ namespace WEEK08.Patterns
 
         private void createTimer_Tick(object sender, EventArgs e)
         {
-            var ball = Factory.CreateNew();
-            _balls.Add(ball);
-            ball.Left = -ball.Width;
-            mainPanel.Controls.Add(ball);
+            var toy = Factory.CreateNew();
+            _toys.Add(toy);
+            toy.Left = -toy.Width;
+            mainPanel.Controls.Add(toy);
         }
 
         private void conveyorTimer_Tick(object sender, EventArgs e)
         {
             var maxPosition = 0;
-            foreach (var ball in _balls)
+            foreach (var toy in _toys)
             {
-                ball.MoveBall();
-                if (ball.Left > maxPosition)
+                toy.Movetoy();
+                if (toy.Left > maxPosition)
                 {
-                    maxPosition = ball.Left;
+                    maxPosition = toy.Left;
                 }
             }
 
             if (maxPosition > 1000)
             {
-                var oldestBall = _balls[0];
-                mainPanel.Controls.Remove(oldestBall);
-                _balls.Remove(oldestBall);
+                var oldesttoy = _toys[0];
+                mainPanel.Controls.Remove(oldesttoy);
+                _toys.Remove(oldesttoy);
             }
 
         }
