@@ -23,6 +23,8 @@ namespace WEEK08.Patterns
             set { _factory = value; }
         }
 
+        private Toy _nextToy;
+
         public Form1()
         {
             InitializeComponent();
@@ -47,7 +49,7 @@ namespace WEEK08.Patterns
             var maxPosition = 0;
             foreach (var toy in _toys)
             {
-                toy.Movetoy();
+                toy.MoveToy();
                 if (toy.Left > maxPosition)
                 {
                     maxPosition = toy.Left;
@@ -61,6 +63,26 @@ namespace WEEK08.Patterns
                 _toys.Remove(oldesttoy);
             }
 
+        }
+
+        private void carBtn_Click(object sender, EventArgs e)
+        {
+            Factory = new CarFactory();
+        }
+
+        private void ballBtn_Click(object sender, EventArgs e)
+        {
+            Factory = new BallFactory();
+        }
+
+        private void DisplayNext()
+        {
+            if (_nextToy != null)
+                Controls.Remove(_nextToy);
+            _nextToy = Factory.CreateNew();
+            _nextToy.Top = lblNext.Top + lblNext.Height + 20;
+            _nextToy.Left = lblNext.Left;
+            Controls.Add(_nextToy);
         }
     }
 }
