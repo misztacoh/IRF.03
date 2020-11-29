@@ -129,6 +129,7 @@
             this.Controls.Add(this.txtEmail);
             this.Name = "Form1";
             this.Text = "Unit Test Example";
+            this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dgwAccounts)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
