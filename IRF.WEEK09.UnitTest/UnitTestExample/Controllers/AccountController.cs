@@ -53,14 +53,5 @@ namespace UnitTestExample.Controllers
             return true;
         }
 
-        public class ValidateEmail
-        {
-            private string email;
-
-            public ValidateEmail(string email)
-            {
-                this.email = email;
-            }
-        }
     }
 }
