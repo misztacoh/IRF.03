@@ -27,6 +27,8 @@ namespace IRF.WEEK._10.WorldHardestGame
         {
             InitializeComponent();
 
+            button1.Visible = false;
+
             ga = gc.ActivateDisplay();
             this.Controls.Add(ga);
 
@@ -64,6 +66,7 @@ namespace IRF.WEEK._10.WorldHardestGame
             {
                 winnerBrain = winners.FirstOrDefault().Brain.Clone();
                 gc.GameOver -= Gc_GameOver;
+                button1.Visible = true;
                 return;
             }
 
@@ -87,6 +90,15 @@ namespace IRF.WEEK._10.WorldHardestGame
         private void Form1_Load(object sender, EventArgs e)
         {
 
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            gc.ResetCurrentLevel();
+            gc.AddPlayer(winnerBrain.Clone());
+            gc.AddPlayer();
+            ga.Focus();
+            gc.Start(true);
         }
     }
 }
