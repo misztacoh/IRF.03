@@ -52,8 +52,6 @@ namespace IRF.WEEK._10.WorldHardestGame
                 "{0}. generáció",
                 generation);
 
-            gc.ResetCurrentLevel();
-
             var playerList = from p in gc.GetCurrentPlayers()
                              orderby p.GetFitness() descending
                              select p;
@@ -69,6 +67,8 @@ namespace IRF.WEEK._10.WorldHardestGame
                 button1.Visible = true;
                 return;
             }
+
+            gc.ResetCurrentLevel();
 
             foreach (var p in topPerformers)
             {
